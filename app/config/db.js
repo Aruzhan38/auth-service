@@ -6,7 +6,7 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'authdb',
   user: process.env.DB_USER || 'authuser',
   password: process.env.DB_PASSWORD || 'authpassword',
-  max: 20,                  // max pool connections
+  max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
@@ -15,7 +15,6 @@ async function connectDB() {
   try {
     const client = await pool.connect();
 
-    // Create users table if it doesn't exist
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id            UUID PRIMARY KEY,

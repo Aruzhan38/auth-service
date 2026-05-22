@@ -1,0 +1,36 @@
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: auth-service-alerts
+        rules:
+          - alert: AuthServiceDown
+            expr: up{job="kubernetes-pods", app="auth-service"} == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Auth Service is DOWN"
+
+          - alert: HighLoginErrorRate
+            expr: rate(auth_login_failure_total[5m]) > 0.1
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High login failure rate"
+
+          - alert: HighTokenVerificationLatency
+            expr: histogram_quantile(0.95, rate(auth_token_verification_duration_seconds_bucket[5m])) > 0.1
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Token verification latency too high"
+
+          - alert: HighCPUUsage
+            expr: rate(process_cpu_seconds_total{app="auth-service"}[1m]) > 0.8
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Auth service CPU usage high"

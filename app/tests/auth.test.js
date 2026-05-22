@@ -27,8 +27,8 @@ describe('POST /api/auth/register', () => {
 
   it('should return 201 on valid registration', async () => {
     pool.query
-      .mockResolvedValueOnce({ rows: [] })      // no existing user
-      .mockResolvedValueOnce({ rows: [] });      // insert success
+      .mockResolvedValueOnce({ rows: [] }) 
+      .mockResolvedValueOnce({ rows: [] }); 
 
     const res = await request(app)
       .post('/api/auth/register')
